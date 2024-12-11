@@ -40,6 +40,19 @@ class NoteWindow(QtWidgets.QMainWindow):
                 self.ui.listWidget.addItem(note_name)
                 self.save_to_file()
 
+    def del_tag(self):
+        if self.ui.listWidget_2.currentItem():
+            key = self.ui.listWidget.currentItem().text()
+            tag = self.ui.listWidget_2.currentItem().text()
+            self.notes[key]["теги"].remove(tag)
+            self.ui.listWidget_2.clear()
+            self.ui.listWidget_2.addItems(self.notes[key]["теги"])
+            self.save_to_file()
+        else:
+            QtWidgets.QMessageBox.warning(
+                self, "Помилка", "Тег для видалення не обраний!")
+
+
     def add_note(self):
         note_name, ok = QtWidgets.QInputDialog.getText(
             self, "Додати замітку", "Назва замітки: ")
@@ -88,12 +101,12 @@ class NoteWindow(QtWidgets.QMainWindow):
 
     def search_tag(self):
         tag = self.ui.lineEdit.text()
-        if self.ui.pushButton_6.text( == "Шукати замітки по тегу") and tag:
+        if self.ui.pushButton_6.text == "Шукати замітки по тегу" and tag:
             notes_filtered = {k: v for k, v in self.notes.items() if tag in v["теги"]}
             self.ui.listWIdget.clear()
             self.ui.listWIdget.addItems(notes_filtered)
             self.ui.pushButton_6.setText("Скинути пошук")
-        elif self.ui.pushButton_6.text() == "кинути пошук"
+        elif self.ui.pushButton_6.text() == "Cкинути пошук":
             self.ui.listWidget.Clear()
             self.ui.listWidget.addItems(self.notes)
             self.ui.lineEdit.clear()
@@ -101,6 +114,6 @@ class NoteWindow(QtWidgets.QMainWindow):
 
 import sys
 app = QtWidgets.QApplication(sys.argv)
-mainWindow = NotesWindow()
+mainWindow = NoteWindow()
 mainWindow.show()
 sys.exit(app.exec_())
