@@ -26,19 +26,19 @@ class NoteWindow(QtWidgets.QMainWindow):
         try:
             with open("notes_data.json", "r", encoding="utf-8") as file:
                 self.notes = json.load(file)
-            self.ui.listWidget.addItem(self.notes)
+            self.ui.listWidget.addItems(self.notes)
         except FileNotFoundError:
             self.notes = {}
 
     def save_to_file(self):
         with open("", "w", encoding= "utf-8") as file:
             json.dump(self.notes, file, sort_keys=True, encure_ascii=False)
-        def add_note(self):
-            note_name, ok = QtWidgets.QInputDialog.getText(self, "Додай замітку", "Назва замітки: ")
-            if ok and note_name != "":
-                self.notes[note_name] = {"текст": "", "теги": []}
-                self.ui.listWidget.addItem(note_name)
-                self.save_to_file()
+    def add_note(self):
+        note_name, ok = QtWidgets.QInputDialog.getText(self, "Додай замітку", "Назва замітки: ")
+        if ok and note_name != "":
+            self.notes[note_name] = {"текст": "", "теги": []}
+            self.ui.listWidget.addItem(note_name)
+            self.save_to_file()
 
     def del_tag(self):
         if self.ui.listWidget_2.currentItem():
@@ -52,14 +52,6 @@ class NoteWindow(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.warning(
                 self, "Помилка", "Тег для видалення не обраний!")
 
-
-    def add_note(self):
-        note_name, ok = QtWidgets.QInputDialog.getText(
-            self, "Додати замітку", "Назва замітки: ")
-        if ok and note_name != "":
-            self.notes[note_name] = {"текст": "", "теги": []}
-            self.ui.listWidget.addItem(note_name)
-            self.save_to_file()
 
     def show_note(self):
         key = self.ui.listWidget.currentItem().text()
@@ -103,14 +95,14 @@ class NoteWindow(QtWidgets.QMainWindow):
         tag = self.ui.lineEdit.text()
         if self.ui.pushButton_6.text == "Шукати замітки по тегу" and tag:
             notes_filtered = {k: v for k, v in self.notes.items() if tag in v["теги"]}
-            self.ui.listWIdget.clear()
-            self.ui.listWIdget.addItems(notes_filtered)
+            self.ui.listWidget.clear()
+            self.ui.listWidget.addItems(notes_filtered)
             self.ui.pushButton_6.setText("Скинути пошук")
         elif self.ui.pushButton_6.text() == "Cкинути пошук":
             self.ui.listWidget.Clear()
             self.ui.listWidget.addItems(self.notes)
             self.ui.lineEdit.clear()
-            self.ui.pushButting_6.setText("Шукати замітки по тегу")
+            self.ui.pushButton_6.setText("Шукати замітки по тегу")
 
 import sys
 app = QtWidgets.QApplication(sys.argv)
